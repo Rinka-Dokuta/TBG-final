@@ -1,0 +1,373 @@
+#include<iostream>
+#include<Windows.h>
+
+using namespace std;
+
+void BattleSystem();
+void MonsterGen(); //declaration
+void DoggyGen();
+string inventory[5] = { "Key", " ", "proton sword", " ", " " };// declare an array
+int gold = 100;
+void shop();
+void ItemDropper();//function declaration
+int health = 100;
+int affinity = 0;
+
+
+int main() {
+	srand(time(NULL)); //randomizes the seed 
+	cout << "Upon regaining consciousness, you find yourself in the ship's cargo bay. The piercing screeches echoing throughout the vessel serve as a chilling reminder that you are not alone in this desolate and abandoned ship and it doesn't sound human." << endl;
+	cout << "you noticed a brown germen sheperd following you, it's name tag says \"Riley\" " << endl;
+	int room = 1;
+	char direction;
+	bool chest1 = 0; //have we opend the first chest?
+	bool chests[5] = { 0,0,0,0,0 }; //use this if you have a lot of chests
+	char input = 'a';
+	bool haswon = false;
+
+	while (input != 'q' && haswon == false && health >0) {// game loop--------------------------------------------
+
+			// 3) print the inventory
+			cout << "your invetory:";
+			for (int i = 0; i < 5; i++) cout << inventory[i] << " ";
+			cout << endl;
+
+			switch (room) {
+			case 1:
+				system("color F2");
+				DoggyGen();
+				cout << "you're in room 1, you can go (E)ast" << endl;
+				cout << "It appears that you're ship's cargo bay. The cargo are destoryed" << endl;
+				cout << "you can (p)et Riley." << endl;
+				cout << " you see a (c)hest in the corner." << endl;
+				if (inventory[0] != "key")
+					cout << "you see a shiny (K)ey on the floor" << endl;
+				
+				cin >> input;   
+
+				if (input == 'c') {
+					if (chests[0] == 0) {
+						cout << "you open the chest!" <<endl;
+						ItemDropper();
+					}
+					else {
+						cout << "The chest is empty!" << endl;
+					}
+				}
+
+				 
+
+				if (input == 'p')
+					affinity += 10;
+				cout << "You pet Riley and he was verry happy! affinity went up by 10" << endl;
+				
+
+				
+				if (input == 'E')
+					room = 2;
+				// 4) get the item
+				if (input == 'K')
+					inventory[0] = "key";
+				cout << "You picked up a key. What door will the key unlock, you wonder?" << endl;
+				break;
+
+			case 2:
+				system("color FC");
+				BattleSystem();
+				MonsterGen(); //Function call     
+				
+				cout << "you're in room 2, you can go (W)est, (N)orth, or (S)outh" << endl;
+				cout << "You're in the main lobby. This area also has secuirty close by" << endl;
+				cout << " There's a (t)reasure box in the corner." << endl;
+				cin >> input;
+				if (input == 'W')
+					room = 1;
+				if (input == 'N')
+					if (inventory[0] == "Key") {
+						cout << "You can unlock the door with the key!" << endl;
+						room = 3;
+						inventory[0] = " ";
+					}
+					else cout << "the door is locked." << endl;
+				if (input == 'S')
+					room = 4;
+				break;
+			case 3:
+				system("color F2");
+				DoggyGen();
+				cout << "you're in room 3, you can go (S)outh" << endl;
+				cout << "You're in the security area. The place is picked clean and looks messy. Maybe a weapon is near?" << endl;
+				cin >> direction;
+				if (direction == 'S')
+					room = 2;
+				break;
+			case 4:
+				system("color F2");
+				DoggyGen();
+				cout << "you're in room 4 you can go (N)orth or (E)ast" << endl;
+				cout << "You're in the decontamination area. This area is responsible for eutralizing a hazard from the environment, property, or life form" << endl;
+				cin >> direction;
+				if (direction == 'N')
+					room = 2;
+				if (direction == 'E')
+					room = 5;
+				break;
+			case 5:
+				system("color FC");
+				MonsterGen();
+				BattleSystem();
+				cout << "you're in room 5 you can go (W)est or (E)ast" << endl;
+				cout << "You're in the main hall area. All the door's are locked due to lockdown. Only way is forward" << endl;
+				cout << "There's a (s)hop in the corner." << endl;
+				cin >> direction;
+				if (direction == 'W')
+					room = 4;
+				if (direction == 'E')
+					room = 6;
+				break;
+			case 6:
+				system("color FC");
+				MonsterGen();
+				BattleSystem();
+				cout << "you're in room 6, you can go (W)est or (N)orth" << endl;
+				cout << "You're in the Medbay! This would be good news if the place wasn't picked clean." << endl;
+				cin >> direction;
+				if (direction == 'W')
+					room = 5;
+				if (direction == 'N')
+					room = 7;
+				break;
+			case 7:
+				system("color F2");
+				DoggyGen();
+				cout << "you're in room 7, you can go (S)outh or (N)orth" << endl;
+				cout << "You're in the lunch area. Most of the food has gone bad" << endl;
+				cin >> direction;
+				if (direction == 'S')
+					room = 6;
+				if (direction == 'N')
+					room = 8;
+				break;
+			case 8:
+				system("color FC");
+				BattleSystem();
+				MonsterGen();
+				cout << "you're in room 8, you can go (S)outh or (E)ast" << endl;
+				cout << "You're in a room with a huge window. It show's how beautiful space can be" << endl;
+				cin >> direction;
+				if (direction == 'S')
+					room = 7;
+				if (direction == 'E')
+					room = 9;
+				break;
+			case 9:
+				system("color F2");
+				DoggyGen();
+				cout << "you're in room 9, you can go (W)est or (E)ast" << endl;
+				cout << "You're in the captian area. Behind the desk there is a hidden door left open. Maybe the captian used it?" << endl;
+				cin >> direction;
+				if (direction == 'W')
+					room = 8;
+				if (direction == 'E')
+					room = 10;
+				break;
+			case 10:
+				system("color FC");
+				MonsterGen();
+				DoggyGen();
+				cout << "You're in a small room with 3 escape pods. One of them has already been used" << endl;
+				cout << "You reached the escape pods!" << endl;
+				cout << "_________________________________" << endl;
+				cout << "|.--------_--_------------_--__--.|" << endl;
+				cout << "||    /\ |_)|_)|   /\ | |(_ |_   ||" << endl;
+				cout << ";;`,_/``\|__|__|__/``\|_| _)|__ ,:|" << endl;
+				cout << "((_(-,-----------.-.----------.-.)`)" << endl;
+				cout << " \__ )        ,'     `.        \ _/ " << endl;
+				cout << " :  :        |_________|       :  : " << endl;
+				cout << " |-'|       ,'-.-.--.-.`.      |`-| " << endl;
+				cout << " |_.|      (( (*  )(*  )))     |._| " << endl;
+				cout << " |  |       `.-`-'--`-'.'      |  | " << endl;
+				cout << " |-'|        | ,-.-.-. |       |._| " << endl;
+				cout << " |  |        |(|-|-|-|)|       |  | " << endl;
+				cout << " :,':        |_`-'-'-'_|       ;`.; " << endl;
+				cout << "  \  \     ,'           `.    /._/ " << endl;
+				cout << "   \/ `._ /_______________\_,'  / " << endl;
+				cout << "    \  / :   ___________   : \,' " << endl;
+				cout << "     `.| |  |           |  |,' " << endl;
+				cout << "       `.|  |           |  | " << endl;
+				cout << "         |  |           |  | " << endl;
+				haswon = true;
+				break;
+			}//end of switch
+		}//end of gameloop
+
+		if (haswon == true) {
+			cout << "The escape pods launches away from the infested ship and set cource for home" << endl;
+			cout << "Thanks for playing!" << endl;
+	}
+}//end of main
+
+//function defintions
+void ItemDropper() {
+	int num = rand() % 100; //0-99
+	if (num < 20) {
+		cout << "you got a dirty sock!" << endl;
+		inventory[2] = "sock";
+	}
+	else if (num < 50) {
+		cout << "you got a cupcake!" << endl;
+		inventory[3] = "cupcake";
+	}
+	else if (num < 75) {
+		cout << "you got a smol frog" << endl;
+		inventory[4] = "frog";
+	}
+	else {
+		cout << "you get nothing!" << endl;
+	}
+
+}
+
+
+
+
+
+
+void MonsterGen() { //definition
+	int num = rand() % 100;//creates a number between 1-100
+		if (num < 15) { //15% chance of Slime
+			cout << "A Slime appeared!" << endl;
+		}
+		else if (num < 20) { //5% chance of Alien
+			cout << "A Alien appeared!" << endl;
+		}
+		else if (num < 50) { //30% chance of Alien spider
+			cout << "A Alien spider appeared!" << endl;
+		}
+		else if (num < 75) { //25% chance of Queen Alien
+			cout << "!WARNING! A QUEEN ALIEN APPEARED!" << endl;
+		}
+		else //40% chance
+			cout << "Nothing appeared." << endl;
+}//end of monster gen
+
+
+void shop() {
+	int input = 'a';
+	while (input != 'q') {
+		cout << "Welcome to the shop!" << endl;
+		cout << "you have $" << gold << endl;
+		cout << "Items for sale;" << endl;
+		cout << "1) Dog treats  : $5" << endl;
+		cout << "2) Med syringe: $20" << endl;
+		cout << "3) stun batton: $50" << endl;
+		cout << "q to quit" << endl;
+		cout << "your gold: " << gold << endl;
+
+		cout << "What would you like to purchase? 0 to quit" << endl;
+		cin >> input;
+
+		if (input == 1) {
+			if (gold >= 5) {
+				cout << "you bought the Dog treats!" << endl;
+				inventory[0] = "Dog treats";
+				gold -= 5;
+			}
+			else
+				cout << "you don't have enough gold!"<< endl;
+
+		}
+		else if (input == 2) {
+			if (gold >= 10) {   
+				cout << "you bought the dirty sock!" << endl;
+				inventory[1] = " dirty sock";
+				gold -= 20;
+			}
+			else
+				cout << "you don't have enough gold!" << endl;
+		}
+
+		else if (input == 3) {
+			cout << "you bought the Key!" << endl;
+			inventory[2] = "Key";
+			gold -= 50;
+		}
+
+
+	}
+}
+
+
+void BattleSystem() {
+	cout << "Battle commencing!" << endl;
+	int MonsterHeatlh = 50;
+	char input;
+	cout << "test: " << inventory[0] << endl;
+	while (health >= 0 && MonsterHeatlh > 0) {
+		//Monster attacks
+		if (inventory[1] == "shield") {
+			cout << "The monster bites you for 10 hp" << endl;
+			health -= 5;
+		}
+		else {
+			cout << "the monsters bites you for 10 hp" << endl;
+			health -= 10;
+		}
+		//player attacks
+		if (inventory[2] == "proton sword") {
+			cout << "you hit the Monster with your sword for 30 hp" << endl;
+			MonsterHeatlh -= 30;
+		}
+		else {
+			cout << "you punch the monster for 3 damage" << endl;
+			MonsterHeatlh -= 3;
+		}
+
+		
+		
+		cout << "your health: " << health << ". Monster health:" << MonsterHeatlh << endl;
+		system("pause");
+		
+		if(health>0 && MonsterHeatlh>0)
+		cout << "you can (f)ight, (r)un, or use (p)otion" << endl;
+		cin >> input;
+		if (input == 'r') {
+			int num = rand() % 100;
+			if (num < 40) {
+				cout << "you escaped the battle!" << endl;
+				break;
+			}
+			else
+				cout << "chance to run failed :(" << endl;
+		}
+		if(input == 'p'){
+			if (inventory[2] == "potion") {
+				cout << "glug glug" << endl;
+				health += 35;
+				inventory[2] = " ";
+			}
+			else
+				cout << "sorry, you don't have any more potions." << endl;
+		}
+		if(input == 'f') cout << "the battle continues..." << endl;
+	}
+}
+
+
+void DoggyGen() { //definition
+		int num = rand() % 100;//creates a number between 1-100
+		if (num < 15) { //15% chance bark action
+			cout << "Riley barks at nothing" << endl;
+		}
+		else if (num < 20) { //5% chance of scratch action
+			cout << "Riley scratches his ear" << endl;
+		}
+		else if (num < 50) { //30% chance of wag tail action
+			cout << "Riley wags his tail like a very happy boi" << endl;
+		}
+		else if (num < 75) { //25% chance of yawn action
+			cout << "Riley yawns" << endl;
+		}
+		else //40% chance
+			cout << "Riley is just sitting like a good boi" << endl;
+	}//end of DoggyGen }   
